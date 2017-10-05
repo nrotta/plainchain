@@ -11,7 +11,6 @@ import (
 type Node struct {
 	UUID       uuid.UUID
 	Address    Address
-	Reward     int64
 	Difficulty int
 	TxsPool    []*Tx
 	txMutex    sync.Mutex
@@ -19,9 +18,9 @@ type Node struct {
 }
 
 // NewNode creates a new p2p node and returns a pointer to it
-func NewNode(address string, difficulty int, reward int64) *Node {
+func NewNode(address string, difficulty int) *Node {
 	bc := NewBlockchain()
-	n := Node{UUID: uuid.New(), Address: Address(address), Difficulty: difficulty, Reward: reward, Blockchain: bc, TxsPool: []*Tx{}}
+	n := Node{UUID: uuid.New(), Address: Address(address), Difficulty: difficulty, Blockchain: bc, TxsPool: []*Tx{}}
 	return &n
 }
 
@@ -56,7 +55,7 @@ func (n *Node) NewBlock() *Block {
 
 // AddBlock mines a given block and adds it to the blockchain
 func (n *Node) AddBlock(block *Block) bool {
-	ok := block.Solve(n.Address, n.Reward, n.Difficulty)
+	ok := block.Solve(n.Address, n.Difficulty)
 	if !ok {
 		return false
 	}
