@@ -12,7 +12,7 @@ type Node struct {
 	UUID       uuid.UUID
 	Address    Address
 	Difficulty int
-	TxsPool    []*Tx
+	txsPool    []*Tx
 	txMutex    sync.Mutex
 	Blockchain
 }
@@ -20,15 +20,20 @@ type Node struct {
 // NewNode creates a new p2p node and returns a pointer to it
 func NewNode(address string, difficulty int) *Node {
 	bc := NewBlockchain()
-	n := Node{UUID: uuid.New(), Address: Address(address), Difficulty: difficulty, Blockchain: bc, TxsPool: []*Tx{}}
+	n := Node{UUID: uuid.New(), Address: Address(address), Difficulty: difficulty, Blockchain: bc, txsPool: []*Tx{}}
 	return &n
+}
+
+// GetTxsPool returns the Txs in the pool for this node
+func (n *Node) GetTxsPool() []*Tx {
+	return n.txsPool
 }
 
 // Mine runs the mining process until the node is shutted down
 func (n *Node) Mine() {
 	for {
-		b := n.NewBlock()
-		ok := n.AddBlock(b)
+		b := n.newBlock()
+		ok := n.addBlock(b)
 		if !ok {
 			fmt.Printf("Mining was unsuccessful for Block %d\n", b.Height)
 			continue
@@ -41,20 +46,18 @@ func (n *Node) Mine() {
 // AddTx adds a transaction to the transaction pool
 func (n *Node) AddTx(tx *Tx) {
 	n.txMutex.Lock()
-	n.TxsPool = append(n.TxsPool, tx)
+	n.txsPool = append(n.txsPool, tx)
 	n.txMutex.Unlock()
 }
 
-// NewBlock creates a new Block using the transactions from the transactions pool and returns a pointer to it
-func (n *Node) NewBlock() *Block {
+func (n *Node) newBlock() *Block {
 	t := n.drainTxsPool()
 	pb := n.Blockchain.GetLatestBlock()
 	b := NewBlock(pb, t)
 	return b
 }
 
-// AddBlock mines a given block and adds it to the blockchain
-func (n *Node) AddBlock(block *Block) bool {
+func (n *Node) addBlock(block *Block) bool {
 	ok := block.Solve(n.Address, n.Difficulty)
 	if !ok {
 		return false
@@ -65,9 +68,9 @@ func (n *Node) AddBlock(block *Block) bool {
 
 func (n *Node) drainTxsPool() *[]*Tx {
 	n.txMutex.Lock()
-	t := make([]*Tx, len(n.TxsPool))
-	copy(t, n.TxsPool)
-	n.TxsPool = []*Tx{}
+	t := make([]*Tx, len(n.txsPool))
+	copy(t, n.txsPool)
+	n.txsPool = []*Tx{}
 	n.txMutex.Unlock()
 	return &t
 }

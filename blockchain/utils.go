@@ -21,8 +21,7 @@ func (a Address) MarshalText() ([]byte, error) {
 	return []byte(fmt.Sprintf("%s", a)), nil
 }
 
-// CalculateHash returns the SHA256 digest of the interface obj
-func CalculateHash(obj interface{}) Hash {
+func calculateHash(obj interface{}) Hash {
 	d := fmt.Sprintf("%v", obj)
 	h := sha256.Sum256([]byte(d))
 	return h

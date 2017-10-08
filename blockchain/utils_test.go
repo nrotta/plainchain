@@ -51,7 +51,7 @@ func TestCalculateHash(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run(tc.key, func(t *testing.T) {
-			actual := fmt.Sprintf("%x", CalculateHash(tc.key))
+			actual := fmt.Sprintf("%x", calculateHash(tc.key))
 			expected := tc.hash
 
 			if actual != expected {

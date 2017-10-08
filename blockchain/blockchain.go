@@ -2,38 +2,44 @@ package blockchain
 
 // Blockchain represents the current blockchain
 type Blockchain struct {
-	Height      uint32
+	height      uint32
 	Chain       map[Hash]*Block
-	BlocksIndex map[uint32]*Block
-	TxsIndex    map[Hash]*Tx
+	blocksIndex map[uint32]*Block
+	txsIndex    map[Hash]*Tx
 }
 
 // NewBlockchain creates a new chain and returns it
 func NewBlockchain() Blockchain {
-	bc := Blockchain{Chain: make(map[Hash]*Block), BlocksIndex: make(map[uint32]*Block), TxsIndex: make(map[Hash]*Tx)}
+	bc := Blockchain{Chain: make(map[Hash]*Block), blocksIndex: make(map[uint32]*Block), txsIndex: make(map[Hash]*Tx)}
 	return bc
 }
 
 // GetLatestBlock returns a pointer to the latest Block in the chain or a nil Block if the chain is empty
 func (bc *Blockchain) GetLatestBlock() *Block {
+	return bc.GetBlock(bc.height)
+}
+
+// GetBlock returns a pointer to the Block located at height defined as param
+func (bc *Blockchain) GetBlock(height uint32) *Block {
 	b := &Block{}
-	if bc.Height > 0 {
-		b = bc.BlocksIndex[bc.Height]
+	if height > 0 {
+		b = bc.blocksIndex[height]
 	}
 	return b
+}
+
+// GetTx returns a pointer to the Tx with the Hash defined as param
+func (bc *Blockchain) GetTx(hash Hash) *Tx {
+	return bc.txsIndex[hash]
 }
 
 // AddBlock adds a given block to the blockchain
 func (bc *Blockchain) AddBlock(block *Block) {
 	bc.Chain[block.Hash] = block
-	bc.BlocksIndex[block.Height] = block
-	bc.AddTxsToIndex(block.Txs)
-	bc.Height++
-}
+	bc.blocksIndex[block.Height] = block
+	bc.height++
 
-// AddTxsToIndex adds the given transactions to the transactions index
-func (bc *Blockchain) AddTxsToIndex(txs []*Tx) {
-	for _, t := range txs {
-		bc.TxsIndex[t.Hash] = t
+	for _, t := range block.Txs {
+		bc.txsIndex[t.Hash] = t
 	}
 }

@@ -13,15 +13,13 @@ type Tx struct {
 
 // NewTx creates a new transaction returns a pointer to it
 func NewTx(sender, recipient Address, value int64) *Tx {
-	ts := time.Now().Unix()
-	t := Tx{Sender: sender, Recipient: recipient, Value: value, Timestamp: ts}
-	t.Hash = CalculateHash(t)
+	t := Tx{Sender: sender, Recipient: recipient, Value: value, Timestamp: time.Now().Unix()}
+	t.Hash = calculateHash(t)
 	return &t
 }
 
-// CalculateMerkle returns the Merkle root in SHA256 of the block transactions
-// Too keep implementation simple, CalculateMerkle will generate the hash of []*Txs, no a proper merkle tree
-func CalculateMerkle(tx []*Tx) Hash {
-	h := CalculateHash(tx)
+// Too keep implementation simple, calculateMerkle will generate the hash of []*Txs, no a proper merkle tree
+func calculateMerkle(tx []*Tx) Hash {
+	h := calculateHash(tx)
 	return h
 }

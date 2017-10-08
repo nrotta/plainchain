@@ -42,7 +42,7 @@ func getBlock(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	b := node.Blockchain.BlocksIndex[uint32(h)]
+	b := node.Blockchain.GetBlock(uint32(h))
 	m, err := json.MarshalIndent(b, "", "   ")
 	if err != nil {
 		w.Write([]byte(fmt.Sprintf("Marshaling block %v failed: %s", b, err)))
@@ -52,7 +52,7 @@ func getBlock(w http.ResponseWriter, r *http.Request) {
 }
 
 func getTxsPool(w http.ResponseWriter, r *http.Request) {
-	t := node.TxsPool
+	t := node.GetTxsPool()
 	m, err := json.MarshalIndent(t, "", "   ")
 	if err != nil {
 		w.Write([]byte(fmt.Sprintf("Marshaling txs pool %v failed: %s", t, err)))
@@ -71,7 +71,7 @@ func getTx(w http.ResponseWriter, r *http.Request) {
 	}
 	copy(h[:], s)
 
-	t := node.Blockchain.TxsIndex[h]
+	t := node.Blockchain.GetTx(h)
 	m, err := json.MarshalIndent(t, "", "   ")
 	if err != nil {
 		w.Write([]byte(fmt.Sprintf("Marshaling transaction %v failed: %s", t, err)))
