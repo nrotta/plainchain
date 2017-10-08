@@ -33,7 +33,6 @@ func (bc *Blockchain) GetTx(hash Hash) *Tx {
 	return bc.txsIndex[hash]
 }
 
-// AddBlock adds a given block to the blockchain
 func (bc *Blockchain) addBlock(block *Block) {
 	bc.chain[block.Hash] = block
 	bc.blocksIndex[block.Height] = block

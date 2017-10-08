@@ -86,7 +86,7 @@ func main() {
 	difficulty := flag.Int("difficulty", 3, "number of leading bytes that should equal 0 in the block hash to be considered mined")
 	flag.Parse()
 
-	node = blockchain.NewNode(*address, *difficulty)
+	node = blockchain.NewNode(blockchain.Address(*address), *difficulty)
 
 	go node.Mine()
 

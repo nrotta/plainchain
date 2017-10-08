@@ -18,9 +18,9 @@ type Node struct {
 }
 
 // NewNode creates a new p2p node and returns a pointer to it
-func NewNode(address string, difficulty int) *Node {
+func NewNode(a Address, difficulty int) *Node {
 	bc := NewBlockchain()
-	n := Node{UUID: uuid.New(), Address: Address(address), Difficulty: difficulty, Blockchain: bc, txsPool: []*Tx{}}
+	n := Node{UUID: uuid.New(), Address: a, Difficulty: difficulty, Blockchain: bc, txsPool: []*Tx{}}
 	return &n
 }
 
