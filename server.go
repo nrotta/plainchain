@@ -80,6 +80,28 @@ func getTx(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(m))
 }
 
+func addPeer(w http.ResponseWriter, r *http.Request) {
+	h := r.FormValue("host")
+	p := node.AddPeer(h)
+
+	m, err := json.MarshalIndent(map[string]string{"host": p}, "", "   ")
+	if err != nil {
+		w.Write([]byte(fmt.Sprintf("Marshaling peer %v failed: %s", p, err)))
+		return
+	}
+	w.Write([]byte(m))
+}
+
+func getPeers(w http.ResponseWriter, r *http.Request) {
+	p := node.GetPeers()
+	m, err := json.MarshalIndent(map[string][]string{"hosts": p}, "", "   ")
+	if err != nil {
+		w.Write([]byte(fmt.Sprintf("Marshaling txs pool %v failed: %s", p, err)))
+		return
+	}
+	w.Write([]byte(m))
+}
+
 func main() {
 	host := flag.String("host", "localhost:3000", "name:port where to run the blockchain node")
 	address := flag.String("address", "1AdgxM5BhcLyRz6qRn8QPPBGJFfcXD5oA6", "address to award the coinbase reward to")
@@ -94,6 +116,8 @@ func main() {
 	r.HandleFunc("/blocks/{height}", getBlock).Methods("GET")
 	r.HandleFunc("/txspool", getTxsPool).Methods("GET")
 	r.HandleFunc("/transactions/{hash}", getTx).Methods("GET")
+	r.HandleFunc("/peers", addPeer).Methods("POST")
+	r.HandleFunc("/peers", getPeers).Methods("GET")
 	http.Handle("/", r)
 
 	fmt.Printf("Running blockchain node at: %s\n", *host)

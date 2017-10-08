@@ -5,23 +5,19 @@ import (
 	"sync"
 )
 
-// Peer represents a peer on the netwrok
-type Peer struct {
-	Host string `json:"host"`
-}
-
 // Node represents a node on the blockchain network
 type Node struct {
 	Address Address
+	peers   map[string]bool
 	txsPool []*Tx
 	txMutex sync.Mutex
 	Blockchain
 }
 
-// NewNode creates a new p2p node and returns a pointer to it
+// NewNode creates a new node and returns a pointer to it
 func NewNode(a Address) *Node {
 	bc := NewBlockchain()
-	n := Node{Address: a, Blockchain: bc, txsPool: []*Tx{}}
+	n := Node{Address: a, Blockchain: bc, txsPool: []*Tx{}, peers: make(map[string]bool)}
 	return &n
 }
 
@@ -49,6 +45,21 @@ func (n *Node) AddTx(tx *Tx) {
 	n.txMutex.Lock()
 	n.txsPool = append(n.txsPool, tx)
 	n.txMutex.Unlock()
+}
+
+// AddPeer adds a peer to the list
+func (n *Node) AddPeer(host string) string {
+	n.peers[host] = true
+	return host
+}
+
+// GetPeers returns the list of peers known to this node
+func (n *Node) GetPeers() []string {
+	var p []string
+	for k := range n.peers {
+		p = append(p, k)
+	}
+	return p
 }
 
 func (n *Node) newBlock() *Block {
