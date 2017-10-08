@@ -33,7 +33,7 @@ func NewBlock(prevBlock *Block, Txs *[]*Tx) *Block {
 
 func (b *Block) solve(address Address, difficulty int) bool {
 	b.addCoinbaseTx(address)
-	b.MerkleRoot = calculateMerkle(b.Txs)
+	b.MerkleRoot = calculateHash(b.Txs) // For simplicity, we just calculate a Hash of all Txs, not the proper Merkle root
 	target := make([]byte, difficulty)
 
 	for b.Nonce = uint32(0); b.Nonce <= math.MaxUint32; b.Nonce++ {

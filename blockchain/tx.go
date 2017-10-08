@@ -17,9 +17,3 @@ func NewTx(sender, recipient Address, value int64) *Tx {
 	t.Hash = calculateHash(t)
 	return &t
 }
-
-// Too keep implementation simple, calculateMerkle will generate the hash of []*Txs, no a proper merkle tree
-func calculateMerkle(tx []*Tx) Hash {
-	h := calculateHash(tx)
-	return h
-}
