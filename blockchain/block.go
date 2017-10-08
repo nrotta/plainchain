@@ -31,9 +31,10 @@ func NewBlock(prevBlock *Block, Txs *[]*Tx) *Block {
 	return &b
 }
 
-func (b *Block) solve(address Address, difficulty int) bool {
+func (b *Block) solve(address Address) bool {
 	b.addCoinbaseTx(address)
 	b.MerkleRoot = calculateHash(b.Txs) // For simplicity, we just calculate a Hash of all Txs, not the proper Merkle root
+	difficulty := b.calculateDifficulty()
 	target := make([]byte, difficulty)
 
 	for b.Nonce = uint32(0); b.Nonce <= math.MaxUint32; b.Nonce++ {
@@ -46,12 +47,16 @@ func (b *Block) solve(address Address, difficulty int) bool {
 }
 
 func (b *Block) addCoinbaseTx(address Address) {
-	r := calculateBlockReward(b.Height)
+	r := b.calculateBlockReward()
 	t := NewTx(Address{}, address, r)
 	b.Txs = append([]*Tx{t}, b.Txs...)
 	b.NumTxs++
 }
 
-func calculateBlockReward(height uint32) int64 {
-	return 5000000000 >> uint(height/210000)
+func (b *Block) calculateBlockReward() int64 {
+	return 5000000000 >> uint(b.Height/210000)
+}
+
+func (b *Block) calculateDifficulty() int {
+	return 3 // TODO: add proper difficulty target calculation
 }

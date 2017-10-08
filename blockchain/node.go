@@ -3,24 +3,25 @@ package blockchain
 import (
 	"fmt"
 	"sync"
-
-	"github.com/google/uuid"
 )
 
-// Node represents a node on the blockchain p2p network
+// Peer represents a peer on the netwrok
+type Peer struct {
+	Host string `json:"host"`
+}
+
+// Node represents a node on the blockchain network
 type Node struct {
-	UUID       uuid.UUID
-	Address    Address
-	Difficulty int
-	txsPool    []*Tx
-	txMutex    sync.Mutex
+	Address Address
+	txsPool []*Tx
+	txMutex sync.Mutex
 	Blockchain
 }
 
 // NewNode creates a new p2p node and returns a pointer to it
-func NewNode(a Address, difficulty int) *Node {
+func NewNode(a Address) *Node {
 	bc := NewBlockchain()
-	n := Node{UUID: uuid.New(), Address: a, Difficulty: difficulty, Blockchain: bc, txsPool: []*Tx{}}
+	n := Node{Address: a, Blockchain: bc, txsPool: []*Tx{}}
 	return &n
 }
 
@@ -58,7 +59,7 @@ func (n *Node) newBlock() *Block {
 }
 
 func (n *Node) addBlock(block *Block) bool {
-	ok := block.solve(n.Address, n.Difficulty)
+	ok := block.solve(n.Address)
 	if !ok {
 		return false
 	}

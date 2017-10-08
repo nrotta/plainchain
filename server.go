@@ -83,10 +83,9 @@ func getTx(w http.ResponseWriter, r *http.Request) {
 func main() {
 	host := flag.String("host", "localhost:3000", "name:port where to run the blockchain node")
 	address := flag.String("address", "1AdgxM5BhcLyRz6qRn8QPPBGJFfcXD5oA6", "address to award the coinbase reward to")
-	difficulty := flag.Int("difficulty", 3, "number of leading bytes that should equal 0 in the block hash to be considered mined")
 	flag.Parse()
 
-	node = blockchain.NewNode(blockchain.Address(*address), *difficulty)
+	node = blockchain.NewNode(blockchain.Address(*address))
 
 	go node.Mine()
 
