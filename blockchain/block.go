@@ -46,8 +46,12 @@ func (b *Block) solve(address Address, difficulty int) bool {
 }
 
 func (b *Block) addCoinbaseTx(address Address) {
-	r := CalculateBlockReward(b.Height)
+	r := calculateBlockReward(b.Height)
 	t := NewTx(Address{}, address, r)
 	b.Txs = append([]*Tx{t}, b.Txs...)
 	b.NumTxs++
+}
+
+func calculateBlockReward(height uint32) int64 {
+	return 5000000000 >> uint(height/210000)
 }

@@ -26,8 +26,3 @@ func calculateHash(obj interface{}) Hash {
 	h := sha256.Sum256([]byte(d))
 	return h
 }
-
-// CalculateBlockReward calculates the reward that must be granted for the block being mined
-func CalculateBlockReward(height uint32) int64 {
-	return 5000000000 >> uint(height/210000) //int64()
-}
