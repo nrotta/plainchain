@@ -3,14 +3,14 @@ package blockchain
 // Blockchain represents the current blockchain
 type Blockchain struct {
 	height      uint32
-	Chain       map[Hash]*Block
+	chain       map[Hash]*Block
 	blocksIndex map[uint32]*Block
 	txsIndex    map[Hash]*Tx
 }
 
 // NewBlockchain creates a new chain and returns it
 func NewBlockchain() Blockchain {
-	bc := Blockchain{Chain: make(map[Hash]*Block), blocksIndex: make(map[uint32]*Block), txsIndex: make(map[Hash]*Tx)}
+	bc := Blockchain{chain: make(map[Hash]*Block), blocksIndex: make(map[uint32]*Block), txsIndex: make(map[Hash]*Tx)}
 	return bc
 }
 
@@ -34,8 +34,8 @@ func (bc *Blockchain) GetTx(hash Hash) *Tx {
 }
 
 // AddBlock adds a given block to the blockchain
-func (bc *Blockchain) AddBlock(block *Block) {
-	bc.Chain[block.Hash] = block
+func (bc *Blockchain) addBlock(block *Block) {
+	bc.chain[block.Hash] = block
 	bc.blocksIndex[block.Height] = block
 	bc.height++
 

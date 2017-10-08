@@ -58,11 +58,11 @@ func (n *Node) newBlock() *Block {
 }
 
 func (n *Node) addBlock(block *Block) bool {
-	ok := block.Solve(n.Address, n.Difficulty)
+	ok := block.solve(n.Address, n.Difficulty)
 	if !ok {
 		return false
 	}
-	n.Blockchain.AddBlock(block)
+	n.Blockchain.addBlock(block)
 	return true
 }
 

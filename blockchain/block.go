@@ -32,7 +32,7 @@ func NewBlock(prevBlock *Block, Txs *[]*Tx) *Block {
 }
 
 // Solve adds the coinbase Tx, calculates the Merkle root of the Txs, and then generates the block hash by iterating the nonce
-func (b *Block) Solve(address Address, difficulty int) bool {
+func (b *Block) solve(address Address, difficulty int) bool {
 	b.addCoinbaseTx(address)
 	b.MerkleRoot = calculateMerkle(b.Txs)
 	target := make([]byte, difficulty)
