@@ -9,4 +9,4 @@ Plain chain that implements the following concepts:
 
 Next steps:
 - Support for multiple peer nodes
-- Transactions chaining
+- Validate, Record, and Query unspent Txs Output (utxos)

@@ -5,11 +5,6 @@ import (
 	"sync"
 )
 
-// Peer represents a peer on the netwrok
-type Peer struct {
-	Host string `json:"host"`
-}
-
 // Node represents a node on the blockchain network
 type Node struct {
 	Address Address
