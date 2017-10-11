@@ -24,18 +24,6 @@ type TxOut struct {
 	Value   int64   `json:"value"`
 }
 
-// NewTxIn creates a new transaction input and returns a pointer to it
-func NewTxIn(index int, prevOutput Hash) *TxIn {
-	t := TxIn{Index: index, PrevOutput: prevOutput}
-	return &t
-}
-
-// NewTxOut creates a new transaction output and returns a pointer to it
-func NewTxOut(recipient Address, value int64) *TxOut {
-	t := TxOut{Value: value, Address: recipient}
-	return &t
-}
-
 // NewTx creates a new transaction from the provided TxIns and TxOuts and returns a pointer to it
 func NewTx(txsIn []*TxIn, txsOut []*TxOut) *Tx {
 	t := Tx{NumTxsIn: len(txsIn), TxsIn: txsIn, NumTxsOut: len(txsOut), TxsOut: txsOut, Timestamp: time.Now().Unix()}
