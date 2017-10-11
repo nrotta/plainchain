@@ -23,8 +23,7 @@ type Block struct {
 	Txs    []*Tx  `json:"txs"`
 }
 
-// NewBlock creates a new Block with the specified transactions, links it to the previous block on the chain and returns a pointer to it
-func NewBlock(prevBlock *Block, Txs *[]*Tx) *Block {
+func newBlock(prevBlock *Block, Txs *[]*Tx) *Block {
 	h := prevBlock.Height + 1
 	t := time.Now().Unix()
 	b := Block{Height: h, Header: Header{PrevHash: prevBlock.Hash, Timestamp: t, NumTxs: len(*Txs)}, Txs: *Txs}

@@ -31,7 +31,8 @@ func TestCalculateBlockReward(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run(fmt.Sprint(tc.height), func(t *testing.T) {
-			actual := CalculateBlockReward(tc.height)
+			b := &Block{Height: tc.height}
+			actual := b.calculateBlockReward()
 			expected := tc.value
 
 			if actual != expected {

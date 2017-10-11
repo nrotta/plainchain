@@ -8,8 +8,7 @@ type Blockchain struct {
 	txsIndex    map[Hash]*Tx
 }
 
-// NewBlockchain creates a new chain and returns it
-func NewBlockchain() Blockchain {
+func newBlockchain() Blockchain {
 	bc := Blockchain{chain: make(map[Hash]*Block), blocksIndex: make(map[uint32]*Block), txsIndex: make(map[Hash]*Tx)}
 	return bc
 }

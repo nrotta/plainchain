@@ -15,8 +15,7 @@ type Node struct {
 
 // NewNode creates a new p2p node and returns a pointer to it
 func NewNode(a Address) *Node {
-	bc := NewBlockchain()
-	n := Node{Address: a, Blockchain: bc, txsPool: []*Tx{}}
+	n := Node{Address: a, Blockchain: newBlockchain()}
 	return &n
 }
 
@@ -49,7 +48,7 @@ func (n *Node) AddTx(tx *Tx) {
 func (n *Node) newBlock() *Block {
 	t := n.drainTxsPool()
 	pb := n.Blockchain.GetLatestBlock()
-	b := NewBlock(pb, t)
+	b := newBlock(pb, t)
 	return b
 }
 
