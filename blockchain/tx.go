@@ -30,11 +30,3 @@ func NewTx(txsIn []*TxIn, txsOut []*TxOut) *Tx {
 	t.Hash = calculateHash(t)
 	return &t
 }
-
-// NewCoinbaseTx creates a new coinbase transaction from the provided address and reward and returns a pointer to it
-func NewCoinbaseTx(address Address, reward int64) *Tx {
-	var txsOuts []*TxOut
-	txsOuts = append(txsOuts, &TxOut{Address: address, Value: reward})
-	t := NewTx([]*TxIn{}, txsOuts)
-	return t
-}

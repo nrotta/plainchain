@@ -47,8 +47,9 @@ func (b *Block) solve(address Address) bool {
 }
 
 func (b *Block) addCoinbaseTx(address Address) {
-	r := b.calculateBlockReward()
-	t := NewCoinbaseTx(address, r)
+	reward := b.calculateBlockReward()
+	txOut := &TxOut{Address: address, Value: reward}
+	t := NewTx([]*TxIn{}, []*TxOut{txOut})
 	b.Txs = append([]*Tx{t}, b.Txs...)
 	b.NumTxs++
 }
